@@ -1,0 +1,5 @@
+{"type":"user","message":{"role":"user","content":[{"type":"text","text":"Please review /work/project/demo.py and ~/notes/plan.md."}]}}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"I will inspect the example."},{"type":"thinking","thinking":"Check the parser behavior."},{"type":"tool_use","name":"Read","input":{"file_path":"/work/project/demo.py"}},{"type":"tool_result","content":"Synthetic file contents loaded."}]}}
+{"type":"system","message":{"role":"system","content":[{"type":"text","text":"Synthetic event outside the kept types."}]}}
+{"type":"assistant","message":{"role":"assistant","content":[]}}
+{"type":"user","message":{"role":"user","content":[{"type":"text","text":"Keep the parser behavior stable."}]}}

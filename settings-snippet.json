@@ -1,0 +1,27 @@
+{
+  "_comment": "Replace the placeholder path with the real absolute path. Append these entries to existing hook arrays rather than overwriting them.",
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          { "type": "command", "command": "python3 /ABSOLUTE/PATH/TO/precompact-protector/capture.py" }
+        ]
+      },
+      {
+        "matcher": "manual",
+        "hooks": [
+          { "type": "command", "command": "python3 /ABSOLUTE/PATH/TO/precompact-protector/capture.py" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          { "type": "command", "command": "python3 /ABSOLUTE/PATH/TO/precompact-protector/rehydrate.py" }
+        ]
+      }
+    ]
+  }
+}
