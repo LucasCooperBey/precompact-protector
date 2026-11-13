@@ -8,7 +8,11 @@ Clone this repository. Open `settings-snippet.json`, replace its placeholder pat
 
 ## How it works
 
-The PreCompact hook runs for automatic and manual compaction. It reads the transcript tail and writes a checkpoint. The SessionStart hook runs only for the `compact` matcher and prints a card with an optional `REHYDRATE.md` written by your own summarizer, the last user intent, files mentioned in recent turns, and the checkpoint turn count and timestamp.
+The PreCompact hook runs for automatic and manual compaction. It reads the transcript tail and writes a checkpoint. The SessionStart hook runs only for the `compact` matcher and prints a card. The card can include an optional `REHYDRATE.md` written by your own summarizer.
+
+When that hook is given the transcript, the floor opens with `- Compaction N of this transcript, this one included`. N counts `compact_boundary` rows already in the transcript, sidechain rows excluded, plus one, because the row for this compaction is written after the hook runs. The floor then quotes the last words you typed. Tool results, skill bodies, compact summaries, and injected notices are skipped. A prompt you queued while the agent was busy counts. A slash command is shown as its name and arguments. When the transcript contains none of your words, the line says none was found. Files in play and the checkpointed-turn count still come from the newest checkpoint. Without a transcript, the card quotes the last user turn stored in that checkpoint.
+
+A helper agent gets a one-line note instead of the card when the hook names a model the main chat's records do not show and a subagent file written in the last 15 minutes holds a reply on that model. Every uncertain case prints the card, including a helper on the main chat's own model. That card says a helper on the same model also receives it.
 
 The card is orientation for the new context. Check specifics against the conversation and files before relying on them.
 
@@ -20,7 +24,7 @@ Everything stays on your machine. Checkpoint and log files are created with mode
 
 ## Limits
 
-The hook reads at most the last 600 KB of the transcript and keeps up to 40 user and assistant turns. The card is a deterministic floor, not a summary.
+The capture hook reads at most the last 600 KB of the transcript and keeps up to 40 user and assistant turns. The card searches for your words, and for the main chat's model, in steps: the last 600 KB, then the last 4 MB, then the last 16 MB. When the file is larger than that and those tails hold no typed words, the word search reads the whole file one line at a time. Rows are split on newline bytes only, so a line separator pasted inside a JSON string stays inside its row. The compaction count reads the whole file. The card is a deterministic floor, not a summary, and it stays within 2600 characters.
 
 ## Tests
 
