@@ -4,7 +4,11 @@ Precompact-protector saves the last turns of a Claude Code session before compac
 
 ## Install
 
-Clone this repository. Open `settings-snippet.json`, replace its placeholder path with the real absolute path to this directory, and merge its hook entries into `~/.claude/settings.json`. Append the entries to existing hook arrays rather than replacing them. There is nothing to install with pip.
+```bash
+git clone https://github.com/LucasCooperBey/precompact-protector.git
+```
+
+Open `settings-snippet.json`, replace its placeholder path with the real absolute path to this directory, and merge its hook entries into `~/.claude/settings.json`. Append the entries to existing hook arrays rather than replacing them. There is nothing to install with pip.
 
 ## How it works
 
@@ -15,6 +19,22 @@ When that hook is given the transcript, the floor opens with `- Compaction N of 
 A helper agent gets a one-line note instead of the card when the hook names a model the main chat's records do not show and a subagent file written in the last 15 minutes holds a reply on that model. Every uncertain case prints the card, including a helper on the main chat's own model. That card says a helper on the same model also receives it.
 
 The card is orientation for the new context. Check specifics against the conversation and files before relying on them.
+
+## Example
+
+After a session where you asked for a rename, got it, and then asked for a `--dry-run` flag, Claude Code compacts. The PreCompact hook saves a checkpoint under `~/.claude/precompact/sessions/<session>/`, and when the session resumes the SessionStart hook prints this card into the new context:
+
+```
+Context protector: working memory from before this compaction. Orientation only; check specifics before relying on them.
+
+## Before compaction (raw floor)
+- Compaction 1 of this transcript, this one included
+- A helper agent on the main chat's model also gets this card: if you are one, keep to your own task
+- Last words you typed (2026-11-12T21:01:00Z): Now add a --dry-run flag to the cli.
+- 3 turns checkpointed at 20261113T050816Z-968360
+```
+
+The card quotes the last thing you typed, so the model picks up the open ask (the flag) and does not stop at the finished one (the rename).
 
 ## Data and privacy
 
